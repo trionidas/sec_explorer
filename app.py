@@ -84,6 +84,7 @@ with st.sidebar:
         st.error("Ticker no encontrado.")
     
     st.markdown("---")
+    st.caption("Trionic 2026")
 
 if cik:
     with st.spinner(f"Analizando {ticker}..."):
@@ -119,7 +120,7 @@ if cik:
                 def make_url(acc, doc):
                     return f"https://www.sec.gov/Archives/edgar/data/{int(cik)}/{acc.replace('-', '')}/{doc}"
                 
-                df_core['Enlace'] = df_core.apply(lambda x: make_url(x['accessionNumber'], x['primaryDocument']), axis=1)
+                df_core['Enlace'] = [make_url(a, p) for a, p in zip(df_core['accessionNumber'], df_core['primaryDocument'])]
                 st.dataframe(
                     df_core[['filingDate', 'form', 'Enlace']].head(10),
                     column_config={"Enlace": st.column_config.LinkColumn()},
